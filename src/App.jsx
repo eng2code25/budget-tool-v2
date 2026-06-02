@@ -1,122 +1,84 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [addIncomeCard, setAddIncomeCard] = useState(false);
+
+  const [incomeType, setIncomeType] = useState("salary");
+
+  const [incomeDate, setIncomeDate] = useState("");
+
+  const [incomeAmount, setIncomeAmount] = useState("");
+
+  const [incomeNotes, setIncomeNotes] = useState("");
+
+  const [incomeInputSummary, setIncomeInputSummary] = useState([]);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <section>
+      <h1>My budget</h1>
+      {/*drop down to key in details*/}
+      <div className="income-expense-btn-container">
+        <div>
+          <button onClick={() => setAddIncomeCard(!addIncomeCard)}>
+            Add income
+          </button>
         </div>
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+          <button>Add expense</button>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </div>
+      {addIncomeCard && (
+        <form>
+          <div className="income-input">
+            <h4>Income</h4>
+            <div className="income-fields">
+              <div>
+                <label>Income type: </label>
+                <select value={incomeType} onChange={(e) => setIncomeType(e.target.value)}>
+                  <option value="salary">Salary</option>
+                  <option value="dividend">Dividend</option>
+                </select>
+              </div>
+              <br />
+              <div>
+                <label>Date: </label>
+                <input
+                  type="date"
+                  value={incomeDate}
+                  onChange={(e) => setIncomeDate(e.target.value)}
+                ></input>
+              </div>
+              <br />
+              <label>Amount: </label>
+              <input
+                placeholder="Add amount here.."
+                type="number"
+                step="0.01"
+                min="0.00"
+                value={incomeAmount}
+                onChange={(e) => setIncomeAmount(e.target.value)}
+              ></input>
+              <br />
+              <br />
+              <label>Remarks: </label>
+              <div className="editor-container">
+                <textarea
+                  className="remark-editor"
+                  placeholder="Add text..."
+                  value={incomeNotes}
+                  onChange={(e) => setIncomeNotes(e.target.value)}
+                ></textarea>
+              </div>
+              <button onClick={(e) => e.preventDefault(), setIncomeInputSummary([...incomeInputSummary, type=incomeType.item, date=incomeDate.item, amount=incomeAmount.item, notes=incomeNotes.item])}>Save</button>
+            </div>
+          </div>
+        </form>
+      )}
+      {/*Transactions*/}
+      <h2>My Transactions</h2>
+    </section>
+  );
 }
 
-export default App
+export default App;
