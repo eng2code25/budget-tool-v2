@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const [addIncomeCard, setAddIncomeCard] = useState(false);
 
-  const [incomeType, setIncomeType] = useState("salary");
+  const [incomeType, setIncomeType] = useState("-- --");
 
   const [incomeDate, setIncomeDate] = useState("");
 
@@ -35,7 +35,11 @@ function App() {
             <div className="income-fields">
               <div>
                 <label>Income type: </label>
-                <select value={incomeType} onChange={(e) => setIncomeType(e.target.value)}>
+                <select
+                  value={incomeType}
+                  onChange={(e) => setIncomeType(e.target.value)}
+                >
+                  <option value="-- --">-- --</option>
                   <option value="salary">Salary</option>
                   <option value="dividend">Dividend</option>
                 </select>
@@ -70,13 +74,63 @@ function App() {
                   onChange={(e) => setIncomeNotes(e.target.value)}
                 ></textarea>
               </div>
-              <button onClick={(e) => e.preventDefault(), setIncomeInputSummary([...incomeInputSummary, type=incomeType.item, date=incomeDate.item, amount=incomeAmount.item, notes=incomeNotes.item])}>Save</button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIncomeInputSummary([
+                    ...incomeInputSummary,
+                    {
+                      type: incomeType,
+                      date: incomeDate,
+                      amount: incomeAmount,
+                      remark: incomeNotes,
+                    },
+                  ]);
+                  setIncomeType("");
+                  setIncomeDate("");
+                  setIncomeAmount("");
+                  setIncomeNotes("");
+                }}
+              >
+                Save
+              </button>
             </div>
           </div>
         </form>
       )}
       {/*Transactions*/}
       <h2>My Transactions</h2>
+      <div>
+        <ul>
+          <div className="transaction-header">
+            <h4>Date</h4>
+            <h4>Income</h4>
+            <h4>Amount</h4>
+            <h4>Remarks</h4>
+            <h4>Action</h4>
+          </div>
+          {incomeInputSummary.map((item, index) => (
+            <li key={index} className="transaction-list">
+              <div>
+                <p>{item.date}</p>
+              </div>
+              <div>
+                <p>{item.type}</p>
+              </div>
+              <div>
+                <p>{item.amount}</p>
+              </div>
+              <div>
+                <p>{item.remark}</p>
+              </div>
+              <div>
+                <button className="edit-btn">Edit</button>
+                <button className="delete-btn">Delete</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 }

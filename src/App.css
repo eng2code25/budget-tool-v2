@@ -27,3 +27,15 @@ body {
   min-width: 400px;
   min-height: 50px;
 }
+
+.transaction-header,
+.transaction-list {
+  display: flex;
+  gap: 200px;
+}
+
+.edit-btn,
+.delete-btn {
+  display: inline-block;
+  margin-right: 10px;
+}
