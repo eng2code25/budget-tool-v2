@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -12,7 +12,39 @@ function App() {
 
   const [incomeNotes, setIncomeNotes] = useState("");
 
-  const [incomeInputSummary, setIncomeInputSummary] = useState([]);
+  {
+    /*persistance state management at local storage*/
+  }
+  const [incomeInputSummary, setIncomeInputSummary] = useState(() => {
+    const income = localStorage.getItem("incomeInput");
+    return income ? JSON.parse(income) : [];
+  });
+
+  {
+    /*write in local storage using useEffect react hook*/
+  }
+  useEffect(() => {
+    localStorage.setItem("incomeInput", JSON.stringify(incomeInputSummary));
+  }, [incomeInputSummary]);
+
+  const [addExpenseCard, setAddExpenseCard] = useState(false);
+
+  const [expenseType, setExpenseType] = useState("-- --");
+
+  const [expenseDate, setExpenseDate] = useState("");
+
+  const [expenseAmount, setExpenseAmount] = useState("");
+
+  const [expenseNotes, setExpenseNotes] = useState("");
+
+  const [expenseInputSummary, setExpneseInputSummary] = useState(() => {
+    const expense = localStorage.getItem("expenseInput");
+    return expense ? JSON.parse(expense) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("expenseInput", JSON.stringify(expenseInputSummary));
+  }, [expenseInputSummary]);
 
   return (
     <section>
@@ -25,7 +57,9 @@ function App() {
           </button>
         </div>
         <div>
-          <button>Add expense</button>
+          <button onClick={() => setAddExpenseCard(!addExpenseCard)}>
+            Add expense
+          </button>
         </div>
       </div>
       {addIncomeCard && (
@@ -98,18 +132,113 @@ function App() {
           </div>
         </form>
       )}
+      {/*Expense drop down card*/}
+      <div>
+        {addExpenseCard && (
+          <form>
+            <div className="expense-input">
+              <h4>Expense</h4>
+              <div className="expense-fields">
+                <div>
+                  <label>Expense type: </label>
+                  <select
+                    value={expenseType}
+                    onChange={(e) => setExpenseType(e.target.value)}
+                  >
+                    <option value="-- --">-- --</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+                <br />
+                <div>
+                  <label>Date: </label>
+                  <input
+                    type="date"
+                    value={expenseDate}
+                    onChange={(e) => setExpenseDate(e.target.value)}
+                  ></input>
+                </div>
+                <br />
+                <label>Amount: </label>
+                <input
+                  placeholder="Add amount here.."
+                  type="number"
+                  step="0.01"
+                  min="0.00"
+                  value={expenseAmount}
+                  onChange={(e) => setExpenseAmount(e.target.value)}
+                ></input>
+                <br />
+                <br />
+                <label>Remarks: </label>
+                <div className="editor-container">
+                  <textarea
+                    className="remark-editor"
+                    placeholder="Add text..."
+                    value={expenseNotes}
+                    onChange={(e) => setExpenseNotes(e.target.value)}
+                  ></textarea>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setExpneseInputSummary([
+                      ...expenseInputSummary,
+                      {
+                        type: expenseType,
+                        date: expenseDate,
+                        amount: expenseAmount,
+                        remark: expenseNotes,
+                      },
+                    ]);
+                    setExpenseType("");
+                    setExpenseDate("");
+                    setExpenseAmount("");
+                    setExpenseNotes("");
+                  }}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        )}
+      </div>
       {/*Transactions*/}
       <h2>My Transactions</h2>
       <div>
         <ul>
           <div className="transaction-header">
             <h4>Date</h4>
-            <h4>Income</h4>
+            <h4>Type</h4>
             <h4>Amount</h4>
             <h4>Remarks</h4>
             <h4>Action</h4>
           </div>
           {incomeInputSummary.map((item, index) => (
+            <li key={index} className="transaction-list">
+              <div>
+                <p>{item.date}</p>
+              </div>
+              <div>
+                <p>{item.type}</p>
+              </div>
+              <div>
+                <p>{item.amount}</p>
+              </div>
+              <div>
+                <p>{item.remark}</p>
+              </div>
+              <div>
+                <button className="edit-btn">Edit</button>
+                <button className="delete-btn">Delete</button>
+              </div>
+            </li>
+          ))}
+          {expenseInputSummary.map((item, index) => (
             <li key={index} className="transaction-list">
               <div>
                 <p>{item.date}</p>
