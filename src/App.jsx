@@ -46,18 +46,47 @@ function App() {
     localStorage.setItem("expenseInput", JSON.stringify(expenseInputSummary));
   }, [expenseInputSummary]);
 
+  {
+    /*search input state management*/
+  }
+  const [searchInput, setSearchInput] = useState("");
+
+  {
+    /*search filter event handler. First combine income and expenses together*/
+  }
+  const allTransactions = [...incomeInputSummary, ...expenseInputSummary];
+
+  const searchFilter = allTransactions.filter((item) => {
+    const filter = searchInput.trim().toLowerCase();
+    return (
+      item.type.toLowerCase().includes(filter) ||
+      item.date.toLowerCase().includes(filter) ||
+      item.remark.toLowerCase().includes(filter)
+    );
+  });
+
   return (
     <section>
       <h1>My budget</h1>
       {/*drop down to key in details*/}
       <div className="income-expense-btn-container">
         <div>
-          <button onClick={() => setAddIncomeCard(!addIncomeCard)}>
+          <button
+            onClick={() => {
+              setAddIncomeCard(!addIncomeCard);
+              setAddExpenseCard(false);
+            }}
+          >
             Add income
           </button>
         </div>
         <div>
-          <button onClick={() => setAddExpenseCard(!addExpenseCard)}>
+          <button
+            onClick={() => {
+              setAddExpenseCard(!addExpenseCard);
+              setAddIncomeCard(false);
+            }}
+          >
             Add expense
           </button>
         </div>
@@ -209,6 +238,13 @@ function App() {
       </div>
       {/*Transactions*/}
       <h2>My Transactions</h2>
+      {/*search input field*/}
+      <input
+        placeholder="search here..."
+        className="search-input"
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+      ></input>
       <div>
         <ul>
           <div className="transaction-header">
@@ -218,46 +254,56 @@ function App() {
             <h4>Remarks</h4>
             <h4>Action</h4>
           </div>
-          {incomeInputSummary.map((item, index) => (
-            <li key={index} className="transaction-list">
-              <div>
-                <p>{item.date}</p>
-              </div>
-              <div>
-                <p>{item.type}</p>
-              </div>
-              <div>
-                <p>{item.amount}</p>
-              </div>
-              <div>
-                <p>{item.remark}</p>
-              </div>
-              <div>
-                <button className="edit-btn">Edit</button>
-                <button className="delete-btn">Delete</button>
-              </div>
-            </li>
-          ))}
-          {expenseInputSummary.map((item, index) => (
-            <li key={index} className="transaction-list">
-              <div>
-                <p>{item.date}</p>
-              </div>
-              <div>
-                <p>{item.type}</p>
-              </div>
-              <div>
-                <p>{item.amount}</p>
-              </div>
-              <div>
-                <p>{item.remark}</p>
-              </div>
-              <div>
-                <button className="edit-btn">Edit</button>
-                <button className="delete-btn">Delete</button>
-              </div>
-            </li>
-          ))}
+          {/*income display*/}
+          {searchFilter
+            .filter(
+              (item) => item.type === "salary" || item.type === "dividend",
+            )
+            .map((item, index) => (
+              <li key={index} className="transaction-list">
+                <div>
+                  <p>{item.date}</p>
+                </div>
+                <div>
+                  <p>{item.type}</p>
+                </div>
+                <div>
+                  <p>{item.amount}</p>
+                </div>
+                <div>
+                  <p>{item.remark}</p>
+                </div>
+                <div>
+                  <button className="edit-btn">Edit</button>
+                  <button className="delete-btn">Delete</button>
+                </div>
+              </li>
+            ))}
+          {/*Expense display*/}
+          {searchFilter
+            .filter(
+              (item) => item.type !== "salary" && item.type !== "dividend",
+            )
+            .map((item, index) => (
+              <li key={index} className="transaction-list">
+                <div>
+                  <p>{item.date}</p>
+                </div>
+                <div>
+                  <p>{item.type}</p>
+                </div>
+                <div>
+                  <p>{item.amount}</p>
+                </div>
+                <div>
+                  <p>{item.remark}</p>
+                </div>
+                <div>
+                  <button className="edit-btn">Edit</button>
+                  <button className="delete-btn">Delete</button>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
     </section>
