@@ -65,6 +65,30 @@ function App() {
     );
   });
 
+  {
+    /*filter by selection*/
+  }
+  const [filterBy, setFilterBy] = useState("Show All");
+
+  const filteredList = searchFilter.filter((item) => {
+    if (filterBy === "income") {
+      return item.type === "salary" || item.type === "dividend";
+    }
+    if (filterBy === "expense") {
+      return item.type !== "salary" && item.type !== "dividend";
+    }
+    return true;
+  });
+
+  {
+    /**Delete event handler */
+  }
+  const deleteEntry = (indexToDelete) => {
+    const updatedList = allTransactions.filter((item, currentIndex) => {
+      return currentIndex !== indexToDelete;
+    });
+  };
+
   return (
     <section>
       <h1>My budget</h1>
@@ -245,6 +269,14 @@ function App() {
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
       ></input>
+      <div className="filter-by">
+        <label>Filter by: </label>
+        <select value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
+          <option value="show all">Show all</option>
+          <option value="income">Income Only</option>
+          <option value="expense">Expenses Only</option>
+        </select>
+      </div>
       <div>
         <ul>
           <div className="transaction-header">
@@ -255,12 +287,12 @@ function App() {
             <h4>Action</h4>
           </div>
           {/*income display*/}
-          {searchFilter
+          {filteredList
             .filter(
               (item) => item.type === "salary" || item.type === "dividend",
             )
             .map((item, index) => (
-              <li key={index} className="transaction-list">
+              <li key={"income-" + index} className="transaction-list">
                 <div>
                   <p>{item.date}</p>
                 </div>
@@ -280,12 +312,12 @@ function App() {
               </li>
             ))}
           {/*Expense display*/}
-          {searchFilter
+          {filteredList
             .filter(
               (item) => item.type !== "salary" && item.type !== "dividend",
             )
             .map((item, index) => (
-              <li key={index} className="transaction-list">
+              <li key={"Expense -" + index} className="transaction-list">
                 <div>
                   <p>{item.date}</p>
                 </div>
