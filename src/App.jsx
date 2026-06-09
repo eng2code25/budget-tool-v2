@@ -83,10 +83,20 @@ function App() {
   {
     /**Delete event handler */
   }
-  const deleteEntry = (indexToDelete) => {
-    const updatedList = allTransactions.filter((item, currentIndex) => {
-      return currentIndex !== indexToDelete;
-    });
+  const deleteEntry = (indexToDelete, category) => {
+    if (category === "income") {
+      const updatedIncome = incomeInputSummary.filter((item, currentIndex) => {
+        return currentIndex !== indexToDelete;
+      });
+      setIncomeInputSummary(updatedIncome);
+    } else if (category === "expense") {
+      const updatedExpense = expenseInputSummary.filter(
+        (item, currentIndex) => {
+          return currentIndex !== indexToDelete;
+        },
+      );
+      setExpneseInputSummary(updatedExpense);
+    }
   };
 
   return (
@@ -307,7 +317,12 @@ function App() {
                 </div>
                 <div>
                   <button className="edit-btn">Edit</button>
-                  <button className="delete-btn">Delete</button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteEntry(index, "income")}
+                  >
+                    Delete
+                  </button>
                 </div>
               </li>
             ))}
@@ -332,7 +347,12 @@ function App() {
                 </div>
                 <div>
                   <button className="edit-btn">Edit</button>
-                  <button className="delete-btn">Delete</button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteEntry(index, "expense")}
+                  >
+                    Delete
+                  </button>
                 </div>
               </li>
             ))}
