@@ -1,16 +1,77 @@
-# React + Vite
+# Monthly Budget Tracker (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## What this does
 
-Currently, two official plugins are available:
+A simple budget tracking application built with React to practice managing data, user input, filtering, and local storage persistence.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The application allows users to record income and expenses, edit transactions, delete entries, search records, and filter transactions by category.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+### Income Management
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* Add income transactions
+* Edit income entries
+* Delete income entries
+* Categorize income (Salary, Dividend)
+
+### Expense Management
+
+* Add expense transactions
+* Edit expense entries
+* Delete expense entries
+* Categorize expenses (Groceries, Bills, Rent, Others)
+
+### Search & Filtering
+
+* Search transactions by:
+
+  * Type
+  * Date
+  * Remarks
+    
+* Filter transactions by:
+
+  * Show All
+  * Income Only
+  * Expenses Only
+
+### Persistence
+
+* Save transactions using localStorage
+* Automatically restore transactions after page refresh
+
+### Transaction Management
+
+* View all transactions in a summary table
+* Edit existing records
+* Delete unwanted records
+* Dynamic UI updates using React state
+
+---
+
+## What I Learned
+
+* React hook fundamentals (useState, useEffect)
+* State-driven UI rendering
+* Controlled form inputs
+* Event handling in React
+* CRUD application patterns
+* Working with arrays using map() and filter()
+* Creating and updating objects in state
+* Search and filtering logic
+* Local storage persistence
+* Managing multiple related pieces of state
+* Breaking larger problems into smaller logical steps
+
+---
+
+## Notes
+
+This project was built to move beyond a basic notes application and practice working with more structured data.
+
+Instead of storing simple text notes, transactions are stored as objects containing multiple fields such as type, date, amount, and remarks. This introduced additional challenges around editing records, filtering data, and keeping React state synchronized with local storage.
+
+The project helped reinforce how React applications are built around state updates, user interactions, and dynamic rendering rather than direct DOM manipulation.
