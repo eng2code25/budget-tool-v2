@@ -37,7 +37,7 @@ function App() {
 
   const [expenseNotes, setExpenseNotes] = useState("");
 
-  const [expenseInputSummary, setExpneseInputSummary] = useState(() => {
+  const [expenseInputSummary, setExpenseInputSummary] = useState(() => {
     const expense = localStorage.getItem("expenseInput");
     return expense ? JSON.parse(expense) : [];
   });
@@ -95,8 +95,57 @@ function App() {
           return currentIndex !== indexToDelete;
         },
       );
-      setExpneseInputSummary(updatedExpense);
+      setExpenseInputSummary(updatedExpense);
     }
+  };
+
+  {
+    /*Edit event handler*/
+  }
+  const [editIncomeIndex, setIncomeEditIndex] = useState(null);
+
+  const saveEditedIncome = (e) => {
+    e.preventDefault();
+    const listCopy = [...incomeInputSummary];
+    const updatedTransaction = {
+      type: incomeType,
+      date: incomeDate,
+      amount: incomeAmount,
+      remark: incomeNotes,
+    };
+
+    listCopy[editIncomeIndex] = updatedTransaction;
+    setIncomeInputSummary(listCopy);
+
+    setIncomeType("");
+    setIncomeDate("");
+    setIncomeAmount("");
+    setIncomeNotes("");
+    setIncomeEditIndex(null);
+    setAddIncomeCard(false);
+  };
+
+  const [editExpenseIndex, setEditExpenseIndex] = useState(null);
+
+  const saveEditedExpense = (e) => {
+    e.preventDefault();
+    const listCopy = [...expenseInputSummary];
+    const updatedTransaction = {
+      type: expenseType,
+      date: expenseDate,
+      amount: expenseAmount,
+      remark: expenseNotes,
+    };
+
+    listCopy[editExpenseIndex] = updatedTransaction;
+    setExpenseInputSummary(listCopy);
+
+    setExpenseType("-- --");
+    setExpenseDate("");
+    setExpenseAmount("");
+    setExpenseNotes("");
+    setEditExpenseIndex(null);
+    setAddExpenseCard(false);
   };
 
   return (
@@ -171,26 +220,31 @@ function App() {
                   onChange={(e) => setIncomeNotes(e.target.value)}
                 ></textarea>
               </div>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIncomeInputSummary([
-                    ...incomeInputSummary,
-                    {
-                      type: incomeType,
-                      date: incomeDate,
-                      amount: incomeAmount,
-                      remark: incomeNotes,
-                    },
-                  ]);
-                  setIncomeType("");
-                  setIncomeDate("");
-                  setIncomeAmount("");
-                  setIncomeNotes("");
-                }}
-              >
-                Save
-              </button>
+              {editIncomeIndex === null && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIncomeInputSummary([
+                      ...incomeInputSummary,
+                      {
+                        type: incomeType,
+                        date: incomeDate,
+                        amount: incomeAmount,
+                        remark: incomeNotes,
+                      },
+                    ]);
+                    setIncomeType("-- --");
+                    setIncomeDate("");
+                    setIncomeAmount("");
+                    setIncomeNotes("");
+                  }}
+                >
+                  Save
+                </button>
+              )}
+              {editIncomeIndex !== null && (
+                <button onClick={saveEditedIncome}>Save Changes</button>
+              )}
             </div>
           </div>
         </form>
@@ -245,26 +299,31 @@ function App() {
                     onChange={(e) => setExpenseNotes(e.target.value)}
                   ></textarea>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setExpneseInputSummary([
-                      ...expenseInputSummary,
-                      {
-                        type: expenseType,
-                        date: expenseDate,
-                        amount: expenseAmount,
-                        remark: expenseNotes,
-                      },
-                    ]);
-                    setExpenseType("");
-                    setExpenseDate("");
-                    setExpenseAmount("");
-                    setExpenseNotes("");
-                  }}
-                >
-                  Save
-                </button>
+                {editExpenseIndex === null && (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setExpenseInputSummary([
+                        ...expenseInputSummary,
+                        {
+                          type: expenseType,
+                          date: expenseDate,
+                          amount: expenseAmount,
+                          remark: expenseNotes,
+                        },
+                      ]);
+                      setExpenseType("");
+                      setExpenseDate("");
+                      setExpenseAmount("");
+                      setExpenseNotes("");
+                    }}
+                  >
+                    Save
+                  </button>
+                )}
+                {editExpenseIndex !== null && (
+                  <button onClick={saveEditedExpense}>Save Changes</button>
+                )}
               </div>
             </div>
           </form>
@@ -316,7 +375,18 @@ function App() {
                   <p>{item.remark}</p>
                 </div>
                 <div>
-                  <button className="edit-btn">Edit</button>
+                  <button
+                    className="edit-btn"
+                    onClick={() => {
+                      (setIncomeDate(item.date),
+                        setIncomeAmount(item.amount),
+                        setIncomeNotes(item.remark),
+                        setAddIncomeCard(true),
+                        setIncomeEditIndex(index));
+                    }}
+                  >
+                    Edit
+                  </button>
                   <button
                     className="delete-btn"
                     onClick={() => deleteEntry(index, "income")}
@@ -346,7 +416,18 @@ function App() {
                   <p>{item.remark}</p>
                 </div>
                 <div>
-                  <button className="edit-btn">Edit</button>
+                  <button
+                    className="edit-btn"
+                    onClick={() => {
+                      (setExpenseDate(item.date),
+                        setExpenseAmount(item.amount),
+                        setExpenseNotes(item.remark),
+                        setAddExpenseCard(true),
+                        setEditExpenseIndex(index));
+                    }}
+                  >
+                    Edit
+                  </button>
                   <button
                     className="delete-btn"
                     onClick={() => deleteEntry(index, "expense")}

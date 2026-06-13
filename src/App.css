@@ -42,6 +42,12 @@ body {
   gap: 200px;
 }
 
+.transaction-list {
+  background-color: green;
+  border: 1px sold black;
+  padding: 5px;
+}
+
 .filter-by {
   margin-top: 20px;
 }
